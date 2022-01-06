@@ -24,14 +24,14 @@ int in4=4;
 //line sensors
 int lsLeft = 2;
 int lsRight = 6;
-int sensorValueLeft;
-int sensorValueRight;
+int sensorValueLeft = 1;
+int sensorValueRight = 1;
 
 //attack adjustment
 boolean target = false;
-int targetD = 67;
+int targetD = 40;
 String action;
-
+int turnCounter;
 
 
 void setup() {
@@ -107,28 +107,51 @@ void attack(){
     target = false;
     action = "backing up";
     Serial.println(action);
+    delay(200);
+    
     }
   else if(sensorValueLeft==0){
-    turnRight();
+    turnRight(60);
     target = false;
     action = "turning right";
     Serial.println(action);
+    delay(200);
     }
   else if(sensorValueRight==0){
-    turnLeft();
+    turnLeft(60);
     target = false;
     action = "turning left";
     Serial.println(action);
+    delay(200);
     }
     else if((target == true) && (sensorValueLeft==1) && (sensorValueRight==1) ){
     forward();
     action = "attacking";
     Serial.println(action);
+    
     }
     else if (!(target == true) && (sensorValueLeft==1) && (sensorValueRight==1) ){
-    forward();
-    action = "looking";
+    
+      if(action=="turning left"){
+        turnLeft(60);
+        action = "turning left";
+      }
+      else if(action == "turning right"){
+        turnRight(60);
+        action = "turning right";
+      }
+      else{
+        if(turnCounter%2==0){
+          turnLeft(60);
+        }
+        else{
+          turnRight(60);
+        }
+        turnCounter++;
+      }
+    
     Serial.println(action);
+   
     }
   }
   
@@ -154,6 +177,19 @@ void forward() {
 
 }
 
+void forward(int tempSpeed) {
+
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, HIGH);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, HIGH);
+
+//SET SPEED TO 20O OUT OF POSSIBLE RANGE 0~255
+  analogWrite(enA, tempSpeed);
+  analogWrite(enB, tempSpeed);
+
+}
+
 void backward(){
 
   digitalWrite(in1, HIGH);
@@ -165,6 +201,16 @@ void backward(){
   analogWrite(enB, 255);
 }
 
+void backward(int tempSpeed){
+
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, LOW);
+
+  analogWrite(enA, tempSpeed);
+  analogWrite(enB, tempSpeed);
+}
 
 void turnLeft(){
 
