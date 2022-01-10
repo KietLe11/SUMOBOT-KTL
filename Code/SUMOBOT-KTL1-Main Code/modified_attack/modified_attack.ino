@@ -55,11 +55,12 @@ void setup() {
 }
 
 void loop() {
-  usReadCm();
+  usReadCm(); //ultrasonic distances
 
-  attack();
+  lineSensor(); //
+
+  attack(); 
   
-  lineSensor();
 }
 
 void usReadCm(){
@@ -99,6 +100,14 @@ void usReadCm(){
      }
   }
 }
+
+void lineSensor(){
+  sensorValueLeft = digitalRead(lsLeft);
+  Serial.print(sensorValueLeft);
+
+  sensorValueRight = digitalRead(lsRight);
+  Serial.print(sensorValueRight);
+  }
 
 void attack(){
   
@@ -155,13 +164,7 @@ void attack(){
     }
   }
   
-void lineSensor(){
-  sensorValueLeft = digitalRead(lsLeft);
-  Serial.print(sensorValueLeft);
 
-  sensorValueRight = digitalRead(lsRight);
-  Serial.print(sensorValueRight);
-  }
 
 
 void forward() {
